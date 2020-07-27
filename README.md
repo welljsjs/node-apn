@@ -1,31 +1,29 @@
 [<p align="center"><img src="doc/logo.png" alt="node-apn" width="450" height="auto"></p>][node-apn]
 
-node-apn
-========
+# node-apn CE (Community Edition)
 
 > A Node.js module for interfacing with the Apple Push Notification service.
+This is a fork from [node-apn/node-apn](https://github.com/node-apn/node-apn) which is no longer maintained.
 
-[![Maintenance help wanted](https://img.shields.io/badge/maintenance-help%20wanted-red.svg)](https://github.com/node-apn/node-apn/issues/436)
 [![Build status][ci-image] ][ci-url]
 [![Code coverage][coverage-image]][coverage-url]
 [![Codacy][codacy-image]][codacy-url]
 [![dependencies][dependencies-image]][dependencies-url]
 [![devdependencies][devdependencies-image]][devdependencies-url]
 
-[logo]:doc/logo.png
-[npm-image]:https://nodei.co/npm/apn.png?downloads=true
-[npm-url]:https://npmjs.com/package/apn
-[ci-image]:https://api.travis-ci.org/node-apn/node-apn.svg
-[ci-url]:https://travis-ci.org/node-apn/node-apn
-[coverage-image]:https://coveralls.io/repos/argon/node-apn/badge.svg?branch=develop
-[coverage-url]:https://coveralls.io/r/argon/node-apn
-[codacy-image]:https://www.codacy.com/project/badge/e7735fbe0db244f3b310657d0dabaa11
-[codacy-url]:https://www.codacy.com/public/argon/node-apn
-
-[dependencies-image]:https://david-dm.org/node-apn/node-apn/status.svg
-[dependencies-url]:https://david-dm.org/node-apn/node-apn
-[devdependencies-image]:https://david-dm.org/node-apn/node-apn/dev-status.svg
-[devdependencies-url]:https://david-dm.org/node-apn/node-apn?type=dev
+[logo]: doc/logo.png
+[npm-image]: https://nodei.co/npm/apn.png?downloads=true
+[npm-url]: https://npmjs.com/package/apn
+[ci-image]: https://api.travis-ci.org/welljsjs/node-apn.svg
+[ci-url]: https://travis-ci.com/github/welljsjs/node-apn
+[coverage-image]: https://coveralls.io/repos/github/welljsjs/node-apn/badge.svg?branch=master
+[coverage-url]: https://coveralls.io/r/welljsjs/node-apn
+[codacy-image]: https://www.codacy.com/project/badge/e7735fbe0db244f3b310657d0dabaa11
+[codacy-url]: https://www.codacy.com/public/welljsjs/node-apn
+[dependencies-image]: https://david-dm.org/welljsjs/node-apn/status.svg
+[dependencies-url]: https://david-dm.org/welljsjs/node-apn
+[devdependencies-image]: https://david-dm.org/welljsjs/node-apn/dev-status.svg
+[devdependencies-url]: https://david-dm.org/welljsjs/node-apn?type=dev
 
 ## Features
 
@@ -50,10 +48,11 @@ If you have previously used v1.x and wish to learn more about what's changed in 
 ### Load in the module
 
 ```javascript
-var apn = require('apn');
+var apn = require("apn");
 ```
 
 ### Connecting
+
 Create a new connection to the Apple Push Notification provider API, passing a dictionary of options to the constructor. You must supply your token credentials in the options.
 
 ```javascript
@@ -61,9 +60,9 @@ var options = {
   token: {
     key: "path/to/APNsAuthKey_XXXXXXXXXX.p8",
     keyId: "key-id",
-    teamId: "developer-team-id"
+    teamId: "developer-team-id",
   },
-  production: false
+  production: false,
 };
 
 var apnProvider = new apn.Provider(options);
@@ -73,7 +72,7 @@ By default, the provider will connect to the sandbox unless the environment vari
 
 For more information about configuration options consult the [provider documentation](doc/provider.markdown).
 
-Help with preparing the key and certificate files for connection can be found in the [wiki][certificateWiki]
+Help with preparing the key and certificate files for connection can be found in the [wiki][certificatewiki]
 
 #### Connecting through an HTTP proxy
 
@@ -84,13 +83,13 @@ var options = {
   token: {
     key: "path/to/APNsAuthKey_XXXXXXXXXX.p8",
     keyId: "key-id",
-    teamId: "developer-team-id"
+    teamId: "developer-team-id",
   },
   proxy: {
     host: "192.168.10.92",
-    port: 8080
+    port: 8080,
   },
-  production: false
+  production: false,
 };
 
 var apnProvider = new apn.Provider(options);
@@ -99,10 +98,12 @@ var apnProvider = new apn.Provider(options);
 The provider will first send an HTTP CONNECT request to the specified proxy in order to establish an HTTP tunnel. Once established, it will create a new secure connection to the Apple Push Notification provider API through the tunnel.
 
 ### Sending a notification
+
 To send a notification you will first need a device token from your app as a string
 
 ```javascript
-let deviceToken = "a9d0ed10e9cfd022a61cb08753f49c5a0b0dfb383697bf9f9d750a1003da19c7"
+let deviceToken =
+  "a9d0ed10e9cfd022a61cb08753f49c5a0b0dfb383697bf9f9d750a1003da19c7";
 ```
 
 Create a notification object, configuring it with the relevant parameters (See the [notification documentation](doc/notification.markdown) for more details.)
@@ -114,14 +115,14 @@ note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
 note.badge = 3;
 note.sound = "ping.aiff";
 note.alert = "\uD83D\uDCE7 \u2709 You have a new message";
-note.payload = {'messageFrom': 'John Appleseed'};
+note.payload = { messageFrom: "John Appleseed" };
 note.topic = "<your-app-bundle-id>";
 ```
 
 Send the notification to the API with `send`, which returns a promise.
 
 ```javascript
-apnProvider.send(note, deviceToken).then( (result) => {
+apnProvider.send(note, deviceToken).then((result) => {
   // see documentation for an explanation of result
 });
 ```
@@ -129,10 +130,17 @@ apnProvider.send(note, deviceToken).then( (result) => {
 This will result in the the following notification payload being sent to the device
 
 ```json
-{"messageFrom":"John Appleseed","aps":{"badge":3,"sound":"ping.aiff","alert":"\uD83D\uDCE7 \u2709 You have a new message"}}
+{
+  "messageFrom": "John Appleseed",
+  "aps": {
+    "badge": 3,
+    "sound": "ping.aiff",
+    "alert": "\uD83D\uDCE7 \u2709 You have a new message"
+  }
+}
 ```
 
-You should only create one `Provider` per-process for each certificate/key pair you have. You do not need to create a new `Provider` for each notification. If you are only sending notifications to one app then there is no need for more than one `Provider`. 
+You should only create one `Provider` per-process for each certificate/key pair you have. You do not need to create a new `Provider` for each notification. If you are only sending notifications to one app then there is no need for more than one `Provider`.
 
 If you are constantly creating `Provider` instances in your app, make sure to call `Provider.shutdown()` when you are done with each provider to release its resources and memory.
 
@@ -148,15 +156,15 @@ Please include as much detail as possible - especially debug logs. If the proble
 
 ## Resources
 
-* [Local and Push Notification Programming Guide: APNs Overview][pl]
-* [Apple Technical Note: Troubleshooting Push Notifications][tn2265]
-* [List of Projects, Applications and Companies Using Node-apn][pacapn]
+- [Local and Push Notification Programming Guide: APNs Overview][pl]
+- [Apple Technical Note: Troubleshooting Push Notifications][tn2265]
+- [List of Projects, Applications and Companies Using Node-apn][pacapn]
 
 ## Credits
 
 Created by [Andrew Naylor][argon]
 
-Thanks to: [Ian Babrou][bobrik], [dgthistle][dgthistle], [Keith Larsen][keithnlarsen], [Mike P][mypark], [Greg Bergé][neoziro], [Asad ur Rehman][AsadR], [Nebojsa Sabovic][nsabovic], [Alberto Gimeno][gimenete], [Randall Tombaugh][rwtombaugh], [Michael Stewart][thegreatmichael], [Olivier Louvignes][mgcrea], [porsager][porsager], [Craig Hockenberry][chockenberry]
+Thanks to: [Ian Babrou][bobrik], [dgthistle][dgthistle], [Keith Larsen][keithnlarsen], [Mike P][mypark], [Greg Bergé][neoziro], [Asad ur Rehman][asadr], [Nebojsa Sabovic][nsabovic], [Alberto Gimeno][gimenete], [Randall Tombaugh][rwtombaugh], [Michael Stewart][thegreatmichael], [Olivier Louvignes][mgcrea], [porsager][porsager], [Craig Hockenberry][chockenberry]
 
 ## License
 
@@ -178,18 +186,18 @@ Released under the MIT License
 
 [npm]: https://npmjs.org
 [node-apn]: https://github.com/node-apn/node-apn
-[certificateWiki]:https://github.com/node-apn/node-apn/wiki/Preparing-Certificates "Preparing Certificates"
+[certificatewiki]: https://github.com/node-apn/node-apn/wiki/Preparing-Certificates "Preparing Certificates"
 [pl]: https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html "Local and Push Notification Programming Guide: APNs Overview"
 [tn2265]: http://developer.apple.com/library/ios/#technotes/tn2265/_index.html "Troubleshooting Push Notifications"
-[googlegroup]:https://groups.google.com/group/node-apn "node-apn Google Group"
-[pacapn]:https://github.com/node-apn/node-apn/wiki/Projects,-Applications,-and-Companies-Using-Node-apn "List of Projects, Applications and Companies Using node-apn"
+[googlegroup]: https://groups.google.com/group/node-apn "node-apn Google Group"
+[pacapn]: https://github.com/node-apn/node-apn/wiki/Projects,-Applications,-and-Companies-Using-Node-apn "List of Projects, Applications and Companies Using node-apn"
 [argon]: https://github.com/argon
 [bobrik]: https://github.com/bobrik
 [dgthistle]: https://github.com/dgthistle
 [keithnlarsen]: https://github.com/keithnlarsen
 [mypark]: https://github.com/mypark
 [neoziro]: https://github.com/neoziro
-[AsadR]: https://github.com/AsadR
+[asadr]: https://github.com/AsadR
 [nsabovic]: https://github.com/nsabovic
 [gimenete]: https://github.com/gimenete
 [rwtombaugh]: https://github.com/rwtombaugh
@@ -197,4 +205,3 @@ Released under the MIT License
 [mgcrea]: https://github.com/mgcrea
 [porsager]: https://github.com/porsager
 [chockenberry]: https://github.com/chockenberry
-
